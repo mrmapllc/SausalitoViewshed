@@ -76,18 +76,14 @@
         url: "https://tiles.arcgis.com/tiles/e78obyrOLbvYxKAG/arcgis/rest/services/ProposedBuilding/SceneServer"
       });
 
-      const observationPointLayer = new SceneLayer({
-        url: "https://services.arcgis.com/e78obyrOLbvYxKAG/arcgis/rest/services/ObservationPoint/SceneServer"
-      });
-
-      view.map.addMany([proposedBuildingLayer, observationPointLayer]);
+      view.map.addMany([proposedBuildingLayer]);
 
       view.when(async () => {
-        // Hide the 3D basemap's labels layer.
+        // Display the 3D basemap's labels layer.
         const labelsLayer = view.map.basemap.referenceLayers.find(
           (layer) => layer.title === "Places and Labels"
         );
-        labelsLayer.visible = false;
+        labelsLayer.visible = true;
 
         // Create the viewshed shape.
         const viewshed = new Viewshed({
