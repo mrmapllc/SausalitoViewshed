@@ -20,6 +20,14 @@
     #promptText {
       margin-top: 0.4rem;
     }
+    #coordinates {
+      margin-top: 1rem;
+    }
+    #coordinates span {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
   </style>
   <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.30/"></script>
@@ -113,6 +121,7 @@
         const createButton = document.getElementById("createButton");
         const cancelButton = document.getElementById("cancelButton");
         const promptText = document.getElementById("promptText");
+        const coordinatesElement = document.getElementById("coordinates");
 
         // Controller which allows to cancel an ongoing viewshed creation operation.
         let abortController = null;
@@ -180,6 +189,16 @@
           promptText.style.display = creating ? "flex" : "none";
         }
 
+        // Function to update the displayed coordinates
+        function updateCoordinates() {
+          const { x, y, z } = viewshed.observer;
+          coordinatesElement.innerHTML = `<span>X: ${x.toFixed(4)}</span><span>Y: ${y.toFixed(4)}</span><span>Z: ${z.toFixed(4)}</span>`;
+        }
+
+        // Add an event listener to update coordinates when the viewshed is moved
+        analysisView.watch("selectedViewshed.observer", updateCoordinates);
+        updateCoordinates(); // Initial update
+
         // Add the component to the UI.
         view.ui.add("viewshedComponent", "top-right");
       });
@@ -194,6 +213,9 @@
     <calcite-button id="cancelButton" style="display:none">Cancel</calcite-button>
     <div id="promptText" style="display: none">
       <em>Start the analysis by clicking in the scene to place the observer point and set the target.</em>
+    </div>
+    <div id="coordinates">
+      <!-- Coordinates will be displayed here -->
     </div>
   </calcite-card>
 </body>
